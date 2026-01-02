@@ -13,7 +13,7 @@ Documentation of the setup steps for the minisforum ms-s1 to use as local ai ser
 * download [ubuntu server](https://ubuntu.com/download/server) (important kernel >= 6.17)
 * to create usb [rufus](https://www.heise.de/download/product/rufus)
 
-##install ubuntu
+## install ubuntu
 * follow standard ubuntu server setup (destroy win11 installation)
 * improve boot time (1) systemd-networkd-wait-online.service
 
@@ -57,7 +57,7 @@ sudo apt upgrade
 sudo apt autoremove
 ```
 
-##install rocm
+## install rocm
 [Ubuntu native installation](https://rocm.docs.amd.com/projects/install-on-linux/en/latest/install/install-methods/package-manager/package-manager-ubuntu.html)
 only 24.04 description is available
 
