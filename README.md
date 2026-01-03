@@ -43,10 +43,10 @@ GRUB_CMDLINE_LINUX_DEFAULT="amd_iommu=off amdgpu.gttsize=126976 ttm.pages_limit=
 sudo update-grub
 ```
 
-* increase lvm space for / the standard 98G are to less for the next steps. Increase by 250G
+* increase lvm space for / the standard 98G are to less for the next steps.
 ```
 df -h
-sudo lvextend --resizefs -L +254G /dev/mapper/ubuntu--vg-ubuntu--lv
+sudo lvextend --resizefs -L +410G /dev/mapper/ubuntu--vg-ubuntu--lv
 df -h
 ```
 
@@ -186,9 +186,11 @@ llama-cli --list-devices
 [docling serve documentation](https://github.com/docling-project/docling-serve/blob/main/docs/deployment.md#local-gpu-amd)
 
 ```
-mkdir ~/docker/docling/
-cd ~/docker/docling/
+cd ~/docker/
 
+git clone https://github.com/docling-project/docling-serve
+cd docling-serve/
+make docling-serve-rocm-image
 
 docker compose -f docs/deploy-examples/compose-amd.yaml up -d
 
