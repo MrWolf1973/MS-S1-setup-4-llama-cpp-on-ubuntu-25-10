@@ -43,10 +43,10 @@ GRUB_CMDLINE_LINUX_DEFAULT="amd_iommu=off amdgpu.gttsize=126976 ttm.pages_limit=
 sudo update-grub
 ```
 
-* increase lvm space for / the standard 98G are to less for the next steps. Increase to 250G
+* increase lvm space for / the standard 98G are to less for the next steps. Increase by 250G
 ```
 df -h
-sudo lvextend --resizefs -L +154G /dev/mapper/ubuntu--vg-ubuntu--lv
+sudo lvextend --resizefs -L +254G /dev/mapper/ubuntu--vg-ubuntu--lv
 df -h
 ```
 
@@ -142,6 +142,42 @@ EOF
 sudo apt update
 sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 # issue https://github.com/containerd/containerd/issues/12741
+
+# Add the current user to the docker group
+sudo usermod -aG docker $LOGNAME
+# reconnect to ssh
+
+#checks
+apt list --installed | grep docker
+docker ps
+
+```
+## monitoring
+```
+wget https://github.com/Umio-Yasuno/amdgpu_top/releases/download/v0.11.0/amdgpu-top_without_gui_0.11.0-1_amd64.deb
+sudo apt install ./amdgpu-top_without_gui_0.11.0-1_amd64.deb
+amdgpu_top
 ```
 
-* 
+
+
+## llama.cpp Docker
+[llama cpp docker.md](https://github.com/ggml-org/llama.cpp/blob/master/docs/docker.md)
+see Dockerfile (is all you can eat, basic version, no optimisation)
+
+```
+mkdir ~/docker
+# copy Dockerfile
+docker build -t rocm-base:0.1 .
+docker run -it --device=/dev/kfd --device=/dev/dri --security-opt seccomp=unconfined --group-add video --volume ~/.cache/llama.cpp/:/root/.cache/llama.cpp/ -p 8033:8033 rocm-base:0.1 
+```
+
+check if devices are identified correct
+```
+cd /app/full
+llama-cli --list-devices
+```
+
+```
+/app/full/llama-server -hf unsloth/gpt-oss-120b-GGUF:F16 --ctx-size 120000 -ngl 999 -fa 1 --no-mmap --host 0.0.0.0 --port 8033
+```
