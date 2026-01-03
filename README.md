@@ -181,3 +181,23 @@ llama-cli --list-devices
 ```
 /app/full/llama-server -hf unsloth/gpt-oss-120b-GGUF:F16 --ctx-size 120000 -ngl 999 -fa 1 --no-mmap --host 0.0.0.0 --port 8033
 ```
+
+## docling 4 rocm
+[docling serve documentation](https://github.com/docling-project/docling-serve/blob/main/docs/deployment.md#local-gpu-amd)
+
+```
+mkdir ~/docker/docling/
+cd ~/docker/docling/
+
+
+docker compose -f docs/deploy-examples/compose-amd.yaml up -d
+
+# Make a test query
+curl -X 'POST' \
+  "localhost:5001/v1/convert/source/async" \
+  -H "accept: application/json" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "sources": [{"kind": "http", "url": "https://arxiv.org/pdf/2501.17887"}]
+  }'
+```
