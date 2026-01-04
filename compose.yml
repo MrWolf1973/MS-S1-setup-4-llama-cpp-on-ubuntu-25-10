@@ -1,0 +1,16 @@
+services:
+  llamacpp:
+    image: rocm-base:0.1
+    #restart: always
+    ports:
+      - "0.0.0.0:8033:8033"
+    volumes:
+      - ~/.cache/llama.cpp/:/root/.cache/llama.cpp/
+    devices:
+      - /dev/kfd
+      - /dev/dri
+    security_opt:
+      - seccomp=unconfined
+    group_add:
+      - video
+    command: /app/full/llama-server -hf unsloth/gpt-oss-120b-GGUF:F16 --ctx-size 120000 -ngl 999 -fa 1 --no-mmap --host 0.0.0.0 --port 8033
